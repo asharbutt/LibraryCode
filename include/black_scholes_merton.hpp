@@ -2,8 +2,8 @@
 
 #include <cmath>      
 #include <stdexcept> 
-#include "C:\Users\ashar\Desktop\Factoris Research\Labs work\C++ Code\Factoris Library\Factoris Library\option_parameters.hpp"
-#include "C:\Users\ashar\Desktop\Factoris Research\Labs work\C++ Code\Factoris Library\Factoris Library\statistics.hpp"
+#include "option_parameters.hpp"
+#include "statistics.hpp"
 
 namespace black_scholes_merton {
 
