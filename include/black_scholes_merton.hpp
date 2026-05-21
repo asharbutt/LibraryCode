@@ -15,5 +15,11 @@ namespace black_scholes_merton {
     double delta(const option_parameters::OptionContract& c, const option_parameters::OptionsMarketData& d) { return c.optionType * std::exp(-d.divYield * c.timeMaturity) * stats::standard_normal_cdf(c.optionType * compute_d1(c, d)); }
     double gamma(const option_parameters::OptionContract& c, const option_parameters::OptionsMarketData& d) { return stats::standard_normal_pdf(compute_d1(c, d)) / (d.spot * d.volatility * std::sqrt(c.timeMaturity)); }
     double vega(const option_parameters::OptionContract& c, const option_parameters::OptionsMarketData& d) { return d.spot * std::exp(-d.divYield * c.timeMaturity) * stats::standard_normal_pdf(compute_d1(c, d)) * std::sqrt(c.timeMaturity); }
-
+    double theta(const option_parameters::OptionContract& c, const option_parameters::OptionsMarketData& d) {
+        const double d1 = compute_d1(c, d);
+        const double d2 = d1 - d.volatility * std::sqrt(c.timeMaturity);
+    
+        double annual_theta =  -((d.spot * stats::standard_normal_pdf(d1) * d.volatility*std::exp(-d.divYield*c.timeMaturity)) / (2 * std::sqrt(c.timeMaturity))) - c.optionType* d.interestRate* c.strike*std::exp(-d.interestRate * c.timeMaturity)* stats::standard_normal_cdf(c.optionType * d2) + c.optionType*d.divYield*d.spot*stats::standard_normal_cdf(c.optionType*d1)*std::exp(-d.divYield*c.timeMaturity);
+        return annual_theta;
+    }
 }
