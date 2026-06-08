@@ -1,0 +1,26 @@
+from dataclasses import dataclass
+from typing import Optional
+
+@dataclass
+class Contract:
+    contractID: int
+    Notional: float
+    instrument: str # VanillaEquityOption, InterestRateSwap...etc
+
+    contractValue: Optional[float] = None
+    modelValue: Optional[float] = None
+
+    #risks
+    delta: Optional[float] = None
+    gamma: Optional[float] = None
+    theta: Optional[float] = None
+    vega: Optional[float] = None
+    rho: Optional[float] = None
+
+@dataclass
+class OptionContract(Contract):
+    Strike: float = 0.0
+    timeMaturity: float = 0.0
+    optionType: int = 1 # +1 or -1 for call/put
+
+    implied_volatility : Optional[float] = None
