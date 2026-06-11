@@ -20,7 +20,7 @@ class Contract:
 @dataclass
 class OptionContract(Contract):
     Strike: float = 0.0
-    timeMaturity: float = 0.0
+    timeMaturity: str = ""
     optionType: int = 1 # +1 or -1 for call/put
-
+    dayCountConvention: str = ""
     implied_volatility : Optional[float] = None
