@@ -16,4 +16,13 @@ namespace option_parameters {
         double divYield;
         double spot;
     };
+
+    struct binomial_parameters {
+        double up;
+        double down;
+        double probabilityUp;
+        int numSteps;
+        double deltaT;
+    };
+
 }

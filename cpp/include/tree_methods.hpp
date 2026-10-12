@@ -4,7 +4,6 @@
 #include <algorithm>
 #include <vector>
 #include "option_parameters.hpp"
-#include "option_parameters.hpp"
 #include "Matrix.hpp"
 
 namespace european_binomial {

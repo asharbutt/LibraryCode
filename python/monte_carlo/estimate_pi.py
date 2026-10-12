@@ -46,6 +46,3 @@ def estimate_pi():
     ax_2.set_xlabel("n")
 
     plt.show()
-
-
-estimate_pi()

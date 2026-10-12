@@ -1,0 +1,60 @@
+from dataclasses import dataclass
+from abc import ABC, abstractmethod
+from typing import Optional
+import numpy as np
+
+@dataclass
+class Trade:
+    tradeID: str
+    is_call: bool  # +1 for call, -1 for put
+    notional: float
+    dayCountConvention: str
+    product_type = ""
+
+    @abstractmethod
+    def payoff(self, spot):
+        ...
+
+@dataclass(kw_only=True)
+class vanillaEquityOption(Trade):
+    tradeID: str
+    is_call: bool # +1 for call, -1 for put
+    notional: float
+    strike: float
+    maturity: str # this should be a date, we calculate the daycount on the fly using a daycount conventions module
+    dayCountConvention: str
+    product_type = "vanilla_equity_option"# single_equity_product
+    process_scheme = "euler"
+
+    def payoff(self, spot):
+        return np.maximum((spot - self.strike),0.0) if self.is_call else np.maximum(spot - self.strike, 0.0)
+
+@dataclass(kw_only=True)
+class digitalOption(Trade):
+    tradeID: str
+    is_call: bool  # +1 for call, -1 for put
+    notional: float
+    fixed_payout: float
+    strike: float
+    maturity: str # this should be a date, we calculate the daycount on the fly using a daycount conventions module
+    dayCountConvention: str
+    product_type = "digital_option"# single_equity_product
+    process_scheme = "euler"
+
+    def payoff(self, spot):
+        indicator_vector = np.heaviside(spot - self.strike, 0) if self.is_call else (self.strike - spot)
+        return indicator_vector*self.fixed_payout
+
+class assetornothingOption(Trade):
+    tradeID: str
+    is_call: bool  # +1 for call, -1 for put
+    notional: float
+    strike: float
+    maturity: str # this should be a date, we calculate the daycount on the fly using a daycount conventions module
+    dayCountConvention: str
+    product_type = "digital_option"# single_equity_product
+    process_scheme = "euler"
+
+    def payoff(self, spot):
+        indicator_vector = np.heaviside(spot - self.strike, 0) if self.is_call else (self.strike - spot)
+        return indicator_vector*self.fixed_payout
