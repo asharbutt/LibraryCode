@@ -28,7 +28,7 @@ class vanillaEquityOption(Trade):
     process_scheme = "euler"
 
     def payoff(self, spot):
-        return np.maximum((spot - self.strike),0.0) if self.is_call else np.maximum(spot - self.strike, 0.0)
+        return np.maximum((spot - self.strike),0.0) if self.is_call else np.maximum(self.strike - spot, 0.0)
 
 @dataclass(kw_only=True)
 class digitalOption(Trade):
@@ -44,9 +44,10 @@ class digitalOption(Trade):
     process_scheme = "euler"
 
     def payoff(self, spot):
-        indicator_vector = np.heaviside(spot - self.strike, 0) if self.is_call else (self.strike - spot)
+        indicator_vector = np.heaviside(spot - self.strike, 0) if self.is_call else  np.heaviside(self.strike - spot, 0)
         return indicator_vector*self.fixed_payout
 
+@dataclass(kw_only=True)
 class assetornothingOption(Trade):
     tradeID: str
     is_call: bool  # +1 for call, -1 for put
@@ -58,9 +59,10 @@ class assetornothingOption(Trade):
     process_scheme = "euler"
 
     def payoff(self, spot):
-        indicator_vector = np.heaviside(spot - self.strike, 0) if self.is_call else (self.strike - spot)
-        return indicator_vector*self.fixed_payout
+        indicator_vector = np.heaviside(spot - self.strike, 0) if self.is_call else np.heaviside(self.strike - spot, 0)
+        return indicator_vector * spot
 
+@dataclass(kw_only=True)
 class vanillaAmericanOption(Trade):
     tradeID: str
     is_call: bool  # +1 for call, -1 for put
@@ -72,23 +74,9 @@ class vanillaAmericanOption(Trade):
     process_scheme = "euler"
 
     def payoff(self, spot):
-        return np.maximum((spot - self.strike), 0.0) if self.is_call else np.maximum(spot - self.strike, 0.0)
+        return np.maximum((spot - self.strike), 0.0) if self.is_call else np.maximum(self.strike - spot, 0.0)
 
-class vanillaBermudanOption(Trade):
-    tradeID: str
-    is_call: bool  # +1 for call, -1 for put
-    notional: float
-    strike: float
-    maturity: str  # this should be a date, we calculate the daycount on the fly using a daycount conventions module
-    dayCountConvention: str
-    observation_dates: []
-    product_type = "vanilla_equity_option"  # single_equity_product
-    process_scheme = "euler"
-
-    def payoff(self, spot):
-        return np.maximum((spot - self.strike), 0.0) if self.is_call else np.maximum(spot - self.strike, 0.0)
-
-
+@dataclass(kw_only=True)
 class up_out_barrier_option(Trade):
     tradeID: str
     is_call: bool  # +1 for call, -1 for put
@@ -102,8 +90,9 @@ class up_out_barrier_option(Trade):
     process_scheme = "exponential_CIR"
 
     def payoff(self, spot):
-        return np.maximum((spot - self.strike), 0.0) if self.is_call else np.maximum(spot - self.strike, 0.0)
+        return np.maximum((spot - self.strike), 0.0) if self.is_call else np.maximum(self.strike - spot, 0.0)
 
+@dataclass(kw_only=True)
 class geometricAsianOption(Trade):
     tradeID: str
     is_call: bool  # +1 for call, -1 for put
@@ -112,10 +101,16 @@ class geometricAsianOption(Trade):
     strike: float
     maturity: str  # this should be a date, we calculate the daycount on the fly using a daycount conventions module
     dayCountConvention: str
+    observation_type: str  # Continuous, daily etc
     observation_dates: []
     product_type = "vanilla_equity_option"  # single_equity_product
     process_scheme = "euler"
 
+    def payoff(self, spot):
+        return np.maximum((spot - self.strike), 0.0) if self.is_call else np.maximum(self.strike - spot, 0.0)
+
+
+@dataclass(kw_only=True)
 class arithmeticAsianOption(Trade):
     tradeID: str
     is_call: bool  # +1 for call, -1 for put
@@ -128,3 +123,6 @@ class arithmeticAsianOption(Trade):
     observation_type: str # Continuous, daily etc
     product_type = "vanilla_equity_option"  # single_equity_product
     process_scheme = "euler"
+
+    def payoff(self, spot):
+        return np.maximum((spot - self.strike), 0.0) if self.is_call else np.maximum(self.strike - spot, 0.0)
