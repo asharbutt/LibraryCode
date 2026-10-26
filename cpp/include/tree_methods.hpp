@@ -47,7 +47,7 @@ namespace american_binomial {
     std::vector<double> optionValue(params.numSteps + 1, 0.0); // initial payoff, will then be used to compute the option value at each Delta T
     std::vector<double> optionValue_temp(params.numSteps + 1, 0.0); // temporary option value vector, used to hold option values from previous time.
 
-    Matrix::Matrix<double> finalStockMatrix(params.numSteps + 1, params.numSteps + 1);
+    Matrix finalStockMatrix(params.numSteps + 1, params.numSteps + 1);
 
     finalStockMatrix(0, 0) = data.spot;
 
