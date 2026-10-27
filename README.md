@@ -9,6 +9,7 @@ cpp/
   include/
     options.hpp               option base struct and vanilla equity payoff
     market_data.hpp           valuation date, spot, rates, dividend yield
+    vol_fetcher.hpp           vol lookup interface and fixed vol
     option_parameters.hpp     contract, market data and binomial tree structs
     Matrix.hpp                simple row-major matrix
     statistics.hpp            normal pdf / cdf
