@@ -7,8 +7,10 @@ Pricing code shown in the [Numerical lab](https://asharbutt.github.io/portfolio/
 ```
 cpp/
   include/
+    options.hpp               option base struct and vanilla equity payoff
+    market_data.hpp           valuation date, spot, rates, dividend yield
     option_parameters.hpp     contract, market data and binomial tree structs
-    Matrix.hpp                simple templated matrix
+    Matrix.hpp                simple row-major matrix
     statistics.hpp            normal pdf / cdf
     black_scholes_merton.hpp  closed-form price and Greeks
     tree_methods.hpp          European and American binomial trees
