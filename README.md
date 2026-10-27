@@ -13,6 +13,7 @@ cpp/
     option_parameters.hpp     contract, market data and binomial tree structs
     Matrix.hpp                simple row-major matrix
     statistics.hpp            normal pdf / cdf
+    interpolation.hpp         linear interpolation
     black_scholes_merton.hpp  closed-form price and Greeks
     tree_methods.hpp          European and American binomial trees
 
